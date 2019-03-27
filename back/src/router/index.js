@@ -43,11 +43,17 @@ class Routes {
       return this.passport.authenticate('jwt', { session: false });
     };
     
-    this.httpServer.all('/', function(req, res, next) {
-      res.header("Access-Control-Allow-Origin", "*");
-      res.header("Access-Control-Allow-Headers", "X-Requested-With");
-    });
-
+    // this.httpServer.all('/', function(req, res, next) {
+    //   res.header("Access-Control-Allow-Origin", "*");
+    //   res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    // });
+    
+    this.httpServer.use(function(req, res, next) {
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        next();
+      });
+    
     this.httpServer.post('/user/login', async (req, res) => {
       const user =req.body;
       if (!user) {
@@ -81,6 +87,13 @@ class Routes {
       });
     });
 
+    this.httpServer.get('/test', async (req, res) => {
+      this.logger.info(`получил`);
+      res.send({
+        status: 'ok',
+        text:'заебись',
+      });
+    });
 
     this.httpServer.get('/catalog',this.bodyParser.json(),this.passport.authenticate('jwt', { session: false }), async (req, res) => {
       const data = await this.projectController.getList(req.user.id);

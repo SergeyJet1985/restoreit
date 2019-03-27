@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './page/home'
 import catalog from './page/catalog'
+import Panel from './panel/Panel'
 
 Vue.use(Router)
 
@@ -13,6 +14,11 @@ export default new Router({
       path: '/',
       name: 'home',
       component: Home
+    },
+    {
+      path: '/admin/panel',
+      name: 'panel',
+      component: Panel
     },
     {
       path: '/smartphone',

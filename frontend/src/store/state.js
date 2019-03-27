@@ -1,0 +1,9 @@
+import Links from './../JavaScript/navigationLinks'
+import miniCategory from './../JavaScript/miniCategory'
+import smartphone from './../JavaScript/smartphone'
+
+export default {
+  Links,
+  miniCategory,
+  smartphone
+}

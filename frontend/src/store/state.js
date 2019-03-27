@@ -5,5 +5,6 @@ import smartphone from './../JavaScript/smartphone'
 export default {
   Links,
   miniCategory,
-  smartphone
+  smartphone,
+  catalog: [],
 }

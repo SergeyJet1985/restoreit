@@ -6,9 +6,12 @@ const test = ({ commit }) => {
       commit('test', response);
     });
 };
+const add = ({ commit },item) => {
+  commit('add',item);
+};
 
 export default {
   test,
-
+  add,
   
 }

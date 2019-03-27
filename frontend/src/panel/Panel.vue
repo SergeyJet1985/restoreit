@@ -5,6 +5,7 @@
 <script>
 import Window from './components/window'
 
+
 export default {
   name:'Panel',
   components:{

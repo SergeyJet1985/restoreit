@@ -1,9 +1,18 @@
 <template >
   <v-container class="window">
     <v-layout column fill-height class="window__block">
-      <add-component/>
+      <v-flex xs12>
+        <v-layout justify-space-between row>
+          <v-btn outline color="blue darken-1" @click="Refresh()">
+            Обновить
+          </v-btn>
+          <v-btn outline color="red darken-1" @click="SingOut()">
+            Выйти
+          </v-btn>
+        </v-layout>
+      </v-flex>
+      <add-component :typeAdd="typeAdd"/>
         <catalog :items="items"  />
-      <catalog/>
     </v-layout>
   </v-container>
 </template>
@@ -17,6 +26,7 @@ export default {
   data(){
     return{
       info:null,
+      typeAdd:'Catalog',
     }
   },
   components:{
@@ -24,6 +34,14 @@ export default {
     catalog,
   },
   methods: {
+    SingOut(){
+      const sv = this;
+      localStorage.removeItem('token');
+      document.location.reload(true);
+    },
+    Refresh(){
+      this.$store.dispatch('catalog')
+    },
     Add(){
       alert('click');
     },

@@ -18,6 +18,8 @@ const httpServer = http.createServer(app);
 
 const io = socketIO(httpServer);
 
+
+
 app.use(express.static(path.join(__dirname, '../../frontend/dist')));
 
 app.enable('trust proxy');

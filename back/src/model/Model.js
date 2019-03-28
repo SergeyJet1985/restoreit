@@ -45,13 +45,45 @@ class Model {
       .collection(this.collectionName)
       .findOneAndUpdate(
         this.getFilter(filter), {
-          $set: update
+          $addToSet: update
         }, 
         params
       )
       .catch(err => {
         console.log(err);
       });
+    return result;
+  }
+  async Insert(filter, update, params) {
+    console
+    filter={
+      _id: filter._id
+      }
+    const result = await this.db.get()
+      .collection(this.collectionName)
+      .findOneAndUpdate(
+        filter, {
+          $addToSet: {
+            models: {
+             ...update
+            },
+          },
+        }, 
+        params
+      )
+      .catch(err => {
+        console.log(err);
+      });
+      if(result.value == null){
+          const resultInsert = await this.db.get()
+            .collection(this.collectionName)
+            .insertOne(filter)
+            .catch(err => {
+              console.log(err);
+            });
+          return resultInsert;
+        
+      }
     return result;
   }
   async findOneAndInsert(filter, update, params) {
@@ -62,7 +94,7 @@ class Model {
       .collection(this.collectionName)
       .findOneAndUpdate(
         this.getFilter(filter), {
-          $set: update
+          $push: update
         }, 
         params
       )
@@ -71,13 +103,14 @@ class Model {
     return result;
   }
 
-  async insertOne(params) {
+  async insert(params) {
     const result = await this.db.get()
       .collection(this.collectionName)
       .insertOne(params)
       .catch(err => {
         console.log(err);
       });
+      console.log('result',result);
     return result;
   }
 
@@ -88,6 +121,7 @@ class Model {
       .catch(err => {
         console.log(err);
       });
+  
     if (result.result.n===0){return false}
     return true
   }

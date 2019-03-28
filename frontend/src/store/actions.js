@@ -6,12 +6,50 @@ const test = ({ commit }) => {
       commit('test', response);
     });
 };
-const add = ({ commit },item) => {
-  commit('add',item);
+const addCatalog = ({ commit },item) => {
+  api.request('post', `addCatalog/${item}`)
+    .then(data => {
+      commit('add',data);
+    })
 };
+
+const addBrand = ({commit},data) => {
+  console.log(data._id,'+',data.model);
+  api.request('post', `addBrand/${data._id}`,data.model)
+    .then(response => {
+      commit('DELETE', response)
+    })
+}
+
+const signIn = ({ commit }, login) => {
+  api.request('post', 'user/login', login)
+    .then(data => {
+      commit('SIGN_IN', data);
+    })
+};
+
+const catalog = ({commit}) => {
+  api.request('get', 'catalogs')
+    .then(data => {
+      commit('catalogs', data)
+    })
+}
+
+
+const deleteCatalog = ({commit}, id) => {
+  api.request('delete', `catalog/${id}`)
+    .then(data => {
+      commit('DELETE', data)
+    })
+}
 
 export default {
   test,
-  add,
+  addCatalog,
+  addBrand,
+  signIn,
+  catalog,
+  deleteCatalog,
+
   
 }

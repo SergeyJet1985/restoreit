@@ -18,7 +18,13 @@ const request = (method, uri, data, timeout = 5000) => {
     console.error('API function call requires uri argument');
     return;
   }
-
+  
+  const JWTtoken = () => {
+    if (localStorage.getItem('token')){
+        return `jwt ${localStorage.getItem('token')}`; 
+      }
+    return 'jwt heeelp'
+    }
   const url = 'http://localhost:3000/'+uri;
   console. log(url);
   const result = axios({
@@ -26,19 +32,13 @@ const request = (method, uri, data, timeout = 5000) => {
     url,
     data,
     headers: {
-      // Authorization: JWTtoken(),
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      Authorization: JWTtoken(),
     },
     timeout,
   }) 
-    .then(response =>{
-      console.log(response);
-    })
     .catch(error => {
-      if (error.response.status === 401) {
-        // store.dispatch('refreshToken', refreshDATA);
-      }
       // store.commit('SET_ERROR', error);
     });
   return result;

@@ -11,6 +11,10 @@ const isAdmin = function(id){
   return false
 } 
 
+const admin = {
+  login:'admin',
+  password: 'restoreit1989'
+}
 
 class Routes {
   constructor({
@@ -49,18 +53,20 @@ class Routes {
     // });
     
     this.httpServer.use(function(req, res, next) {
-        res.header("Access-Control-Allow-Origin", "*");
-        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-        next();
-      });
+      res.header("Access-Control-Allow-Origin", "*");
+      res.header ('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS');
+      res.header("Access-Control-Allow-Headers", "Origin, Authorization, X-Requested-With, Content-Type, Accept");
+      next();
+    });
     
     this.httpServer.post('/user/login', async (req, res) => {
+      console.log (req.body);
       const user =req.body;
       if (!user) {
         console.log(user, 'notlogin');
         res.status(401).json({ message: 'no such user found' });
       }
-      if (user.password === req.body.password) {
+      if (admin.password === user.password) {
         const payload = 
         { id: user._id,
           login: user.login,
@@ -87,7 +93,7 @@ class Routes {
       });
     });
 
-    this.httpServer.get('/test', async (req, res) => {
+    this.httpServer.get('/test',this.bodyParser.json(),this.passport.authenticate('jwt', { session: false }), async (req, res) => {
       this.logger.info(`получил`);
       res.send({
         status: 'ok',
@@ -95,15 +101,15 @@ class Routes {
       });
     });
 
-    this.httpServer.get('/catalog',this.bodyParser.json(),this.passport.authenticate('jwt', { session: false }), async (req, res) => {
-      const data = await this.projectController.getList(req.user.id);
+    this.httpServer.get('/catalogs',this.bodyParser.json(),this.passport.authenticate('jwt', { session: false }), async (req, res) => {
+      const data = await this.projectController.getList();
       res.send({
         status: 'ok',
         data,
       });
     });
     
-    this.httpServer.get('/catalog/:brand',this.bodyParser.json(),this.passport.authenticate('jwt', { session: false }), async (req, res) => {
+    this.httpServer.get('/catalogs/:brand',this.bodyParser.json(),this.passport.authenticate('jwt', { session: false }), async (req, res) => {
       const data = await this.projectController.get({
         brand:req.params.brand,
       });
@@ -113,31 +119,28 @@ class Routes {
       });
     });
 
-    this.httpServer.post('/projects', this.bodyParser.json(),this.bodyParser.json(),this.passport.authenticate('jwt', { session: false }), async (req, res) => {
-      this.io.sockets.in(req.user.login).emit('message', {msg: 'Проект '+req.body.name+' успешно создан'});
-      const dataProject= req.body;
-      dataProject.id=req.user.id;
-      const _ = await this.projectController.create(req.body);
+    this.httpServer.post('/addCatalog/:id', this.bodyParser.json(),this.bodyParser.json(),this.passport.authenticate('jwt', { session: false }), async (req, res) => {
+      const _ = await this.projectController.create(req.params.id);
       res.send({ status: 'ok' });
     });
 
-    this.httpServer.post('/projects/:id', this.bodyParser.json(), async (req, res) => {
+    this.httpServer.post('/addBrand/:id', this.bodyParser.json(), async (req, res) => {
       const _ = await this.projectController.update({
         _id: req.params.id,
       }, req.body);
       res.send({ status: 'ok' });
     });
 
-    this.httpServer.delete('/projects/:id',this.bodyParser.json(),this.passport.authenticate('jwt', { session: false }), this.bodyParser.json(), async (req, res) => {
+    this.httpServer.delete('/catalog/:id',this.bodyParser.json(),this.passport.authenticate('jwt', { session: false }), this.bodyParser.json(), async (req, res) => {
+      console.log(123)
       const result = await this.projectController.delete({
         _id: req.params.id,
-        password: req.body.password,
       });
-      if (result){
-        this.io.sockets.in(req.user.login).emit('message', {msg: 'Проект '+req.body.name+' успешно удален'}); 
-      }else{
-        this.io.sockets.in(req.user.login).emit('message', {msg: 'Проект '+req.body.name+' не удален'});
-      }
+      // if (result){
+      //   this.io.sockets.in(req.user.login).emit('message', {msg: 'Проект '+req.body.name+' успешно удален'}); 
+      // }else{
+      //   this.io.sockets.in(req.user.login).emit('message', {msg: 'Проект '+req.body.name+' не удален'});
+      // }
       res.send({ status: 'ok' });
     });
 

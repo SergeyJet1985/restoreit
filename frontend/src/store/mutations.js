@@ -11,8 +11,25 @@ export default {
   },
   add(state, item) {
     console.log('ss',item)
-   state.catalog.push(item);
   },
 
+  catalogs(state, data) {
+    state.catalog = data.data.data;
+  },
+
+
+  SIGN_IN(state, data) {
+    const JWTtoken = data.data.token;
+    console.log(JWTtoken);
+    localStorage.setItem('token', JWTtoken);
+    document.location.reload(true);
+  },
+
+  SIGN_IN_FAIL() {
+    console.log('LOGIN FAIL');
+  },
+  DELETE() {
+    console.log('DELETED');
+  },
   
 }

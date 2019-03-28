@@ -11,7 +11,8 @@ class CreateProject {
 
   async execute(params) {
     this.logger.debug('CreateProject', params);
-    const result = await this.projectModel.insertOne(params);
+    const collection = { catalog: params};
+    const result = await this.projectModel.insert(collection);
     this.logger.debug('CreateProject 2', params);
     return true;
   }

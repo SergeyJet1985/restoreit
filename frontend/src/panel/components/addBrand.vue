@@ -29,9 +29,11 @@
     </v-dialog>
   </div>
 </template>
+
+
 <script>
 export default {
-  name:'addComponent',
+  name:'Brand',
   data(){
     return{
       name: null,

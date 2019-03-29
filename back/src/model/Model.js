@@ -126,6 +126,28 @@ class Model {
     return true
   }
 
+  async deleteOneModel(params) {
+    const filter={
+      _id: params._id,
+      }
+    const modelDelete = {
+      name : params.model
+    }
+    const result = await this.db.get()
+      .collection(this.collectionName)
+      .update(
+        this.getFilter(filter), {
+          $pull: {model:{'name':params.model}},
+        }, 
+        params
+      )
+      .catch(err => {
+        console.log(err);
+      });
+  
+    return true
+  }
+
   getFilter(filter) {
     if (filter && filter['_id']) {
       filter['_id'] = this.db.objectId(filter['_id']);

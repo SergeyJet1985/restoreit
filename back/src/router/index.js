@@ -144,6 +144,20 @@ class Routes {
       res.send({ status: 'ok' });
     });
 
+    this.httpServer.delete('/model/:id',this.bodyParser.json(),this.passport.authenticate('jwt', { session: false }), this.bodyParser.json(), async (req, res) => {
+      console.log(req.params.id,'+',req.body)
+      const result = await this.projectController.removeModel({
+        _id: req.params.id,
+        model:req.body.model
+      });
+      // if (result){
+      //   this.io.sockets.in(req.user.login).emit('message', {msg: 'Проект '+req.body.name+' успешно удален'}); 
+      // }else{
+      //   this.io.sockets.in(req.user.login).emit('message', {msg: 'Проект '+req.body.name+' не удален'});
+      // }
+      res.send({ status: 'ok' });
+    });
+
 
     this.http.listen(this.config.port, '0.0.0.0', (err) => {
       if (err) {

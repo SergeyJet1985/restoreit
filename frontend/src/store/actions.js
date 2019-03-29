@@ -42,6 +42,13 @@ const deleteCatalog = ({commit}, id) => {
       commit('DELETE', data)
     })
 }
+const deleteModel = ({commit}, data) => {
+  console.log(data._id,'+',data.model);
+  api.request('delete', `model/${data._id}`, data)
+    .then(data => {
+      commit('DELETE', data)
+    })
+}
 
 export default {
   test,
@@ -50,6 +57,7 @@ export default {
   signIn,
   catalog,
   deleteCatalog,
+  deleteModel,
 
   
 }

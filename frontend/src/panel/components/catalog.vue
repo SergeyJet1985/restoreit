@@ -21,7 +21,7 @@
             <v-btn fab dark small color="green">
               <v-icon dark>add</v-icon>
             </v-btn>
-            <v-btn fab dark small color="pink">
+            <v-btn @click="deleteModel(item._id, model.name)" fab dark small color="pink">
               <v-icon dark>remove</v-icon>
             </v-btn>
             <v-btn fab dark small color="cyan">
@@ -64,6 +64,13 @@ export default {
   },
   
   methods:{
+    deleteModel(id, brand){
+      const model = {
+        _id:id,
+        model:brand
+      }
+      this.$store.dispatch('deleteModel', model);
+    },
     removeCatalog(id){
       this.$store.dispatch('deleteCatalog', id);
     },

@@ -14,13 +14,13 @@
       <v-content style="padding:70px 0 0 0;">
           <router-view></router-view>
       </v-content>
-      <v-footer app></v-footer>
     </v-app>
   </div>
 </template>
 <script>
 import navigationLink from './components/navigation/navigationLink'
 import navigationButton from './components/navigation/navigationButton'
+import footerSite from './components/footer/footer'
 
 export default {
   data: () => ({
@@ -29,6 +29,7 @@ export default {
   components:{
     navigationLink,
     navigationButton,
+    footerSite,
   },
   computed:{
     Links(){
@@ -57,11 +58,24 @@ export default {
     }
 }
 #app {
+  .v-content{
+
+  }
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  .block__footer{
+    width: 100%;
+    height:auto;
+    padding: 15px;
+    display: -webkit-flex; 
+    -webkit-flex-direction: row;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+  }
 }
 #nav {
   padding: 30px;
@@ -73,5 +87,6 @@ export default {
     }
   }
 }
+
 
 </style>

@@ -25,7 +25,7 @@ const request = (method, uri, data, timeout = 5000) => {
       }
     return 'jwt heeelp'
     }
-  const url = 'http://194.5.157.38/'+uri;
+  const url = 'http://194.5.157.38:3000/'+uri;
   console. log(url);
   const result = axios({
     method,

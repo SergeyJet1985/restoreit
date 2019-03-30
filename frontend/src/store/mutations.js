@@ -9,6 +9,12 @@ export default {
 
    // state.appStatus = payload;
   },
+
+  CATEGORY_LOAD(state, index) {
+    state.category = state.catalog[index];
+    // state.appStatus = payload;
+   },
+  
   add(state, item) {
     console.log('ss',item)
   },

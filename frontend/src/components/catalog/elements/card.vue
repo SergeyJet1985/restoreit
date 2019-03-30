@@ -11,7 +11,6 @@
         <v-card-title primary-title>
           <div>
             <h3 class="text-xs-center" >{{title}}</h3>
-             {{ text }} 
           </div>
         </v-card-title>
          <v-expand-transition>
@@ -37,14 +36,16 @@
 export default {
   name:'Card',
   props:{
-    link: String,
+    index: Number,
     title: String,
-    text: String,
     img: String,
+    marks: Array,
+    models: Array,
   },
   methods:{
     Push(){
-        this.$router.push(this.link)
+      this.$store.dispatch('loadCategory',this.index);
+      this.$router.push('catalog');
     },
   }
 }
@@ -62,21 +63,30 @@ export default {
     opacity: 1;
   }
 }
-.card{
-  width: 250px;
-
-}
-h3{
-  width: 200px;
-  font-size: 26px;
-}
-@media only screen and (max-width: 769px) {
-  .card{
-  width: 150px;
+.v-content__wrap{
+  .container{
+    .layout{
+      .card{
+        margin-top:25px;
+      }
+    }
   }
-  h3{
-  width: 100px;
-  font-size: 16px;
+}
+
+
+@media only screen and (max-width: 768px) {
+  .v-content__wrap{
+    .container{
+      .layout{
+        .flex.xs2{
+          max-width: none;
+        }
+        .card{
+          width: auto;
+          margin-bottom:25px;
+        }
+      }
+    }
   }
 }
 </style>

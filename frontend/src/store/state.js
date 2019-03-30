@@ -6,6 +6,7 @@ export default {
   Links,
   miniCategory,
   smartphone,
+  category:{},
   catalog: [],
   JWT:localStorage.getItem('token'),
   model:{

@@ -9,6 +9,7 @@ const bodyParser = require('body-parser');
 const passport = require('passport');
 const path = require('path');
 const auth = require('./auth/authorize');
+const history = require('connect-history-api-fallback');
 
 const IoC = require('./IoC');
 const ioc = new IoC;
@@ -20,8 +21,14 @@ const io = socketIO(httpServer);
 
 
 
-app.use(express.static(path.join(__dirname, '../../frontend/dist')));
-
+//app.use(express.static(path.join(__dirname, '../../frontend/dist')));
+const staticFileMiddleware = express.static(path.join(__dirname, '../../frontend/dist'));
+app.use(staticFileMiddleware);
+app.use(history({
+  disableDotRule: true,
+  verbose: true
+}));
+app.use(staticFileMiddleware);
 app.enable('trust proxy');
 passport.use(auth);
 app.use(passport.initialize());

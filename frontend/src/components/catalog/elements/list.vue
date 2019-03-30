@@ -4,13 +4,13 @@
       <v-layout slot-scope="{ hover }"  @click="Push()" class='card' align-center justify-center column fill-height>
           <v-card >
             <v-img
-              src="https://droidone.ru/image/cache/catalog/1%20blue-250x250.jpg"
+              :src='model.img'
               :aspect-ratio="1"
             >
             </v-img>
             <v-card-title primary-title>
               <div>
-                <h3 class="text-xs-center" >{{model}}</h3>
+                <h3 class="text-xs-center" >{{model.mark}}{{model.name}}</h3>
               </div>
             </v-card-title>
             <v-expand-transition>
@@ -37,7 +37,7 @@
 export default {
   name:'list',
   props:{
-    model: String,
+    model: Object,
   },
   methods:{
     Push(){

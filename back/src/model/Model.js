@@ -38,9 +38,14 @@ class Model {
   async findOneAndUpdate(filter, update, params) {
     filter={
       _id: filter._id,
-      password:update.password
       }
      //console.log('findOneAndUpdate', filter, update);
+    update = {
+      model:{
+        name:update.name,
+        img:update.img,
+      }
+    }
     const result = await this.db.get()
       .collection(this.collectionName)
       .findOneAndUpdate(
@@ -54,8 +59,28 @@ class Model {
       });
     return result;
   }
+
+  async findOneAndUpdateService(filter, update, params) {
+     //console.log('findOneAndUpdate', filter, update);
+    const addService = {
+          product: update.product,
+          price:update.price,  
+    }
+    console.log(filter._id);
+    const search = this.getFilter(filter)
+    const result = await this.db.get()
+      .collection(this.collectionName)
+      .findOneAndUpdate(
+        {'_id':filter._id,'model.name':update.name}, {
+          $addToSet: { "model.$.service": addService } 
+        }, 
+      )
+      .catch(err => {
+        console.log(err);
+      });
+    return result;
+  }
   async Insert(filter, update, params) {
-    console
     filter={
       _id: filter._id
       }
@@ -110,7 +135,6 @@ class Model {
       .catch(err => {
         console.log(err);
       });
-      console.log('result',result);
     return result;
   }
 
@@ -138,6 +162,31 @@ class Model {
       .update(
         this.getFilter(filter), {
           $pull: {model:{'name':params.model}},
+        }, 
+        params
+      )
+      .catch(err => {
+        console.log(err);
+      });
+  
+    return true
+  }
+
+  async deleteOneService(params) {
+    const filter={
+      _id: params._id,
+      }
+    const modelDelete = {
+      name : params.model
+    }
+    const result = await this.db.get()
+      .collection(this.collectionName)
+      .update(
+        {'_id':filter._id,'model.name':update.name}, {
+          $pull: {"model.$.service":{
+            'product':params.product,
+            'price':params.price
+          }},
         }, 
         params
       )

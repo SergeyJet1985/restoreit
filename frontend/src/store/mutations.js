@@ -12,11 +12,17 @@ export default {
   add(state, item) {
     console.log('ss',item)
   },
+  
+  CATALOG(state,data){
 
+  },
   catalogs(state, data) {
     state.catalog = data.data.data;
   },
-
+  MODEL(state,data){
+    state.model = data;
+    router.push('/admin/panel/model');
+  },
 
   SIGN_IN(state, data) {
     const JWTtoken = data.data.token;

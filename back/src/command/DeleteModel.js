@@ -13,6 +13,11 @@ class DeleteProject {
     const result = await this.projectModel.deleteOneModel(params);
     return result;
   }
+
+  async executeService(params) {
+    const result = await this.projectModel.deleteOneService(params);
+    return result;
+  }
 }
 
 module.exports = DeleteProject;

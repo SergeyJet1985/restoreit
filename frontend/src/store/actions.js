@@ -1,13 +1,13 @@
 import api from '../api/api';
 
-const test = ({ commit }) => {
-  api.request('get', 'test', null, 2500)
-    .then(response => {
-      commit('test', response);
-    });
+const getCatalog = ({ commit },test) => {
+  api.request('getCatalog')
+    .then(data => {
+      commit('CATALOG',data);
+    })
 };
-const addCatalog = ({ commit },item) => {
-  api.request('post', `addCatalog/${item}`)
+const addCatalog = ({ commit },test) => {
+  api.request('post', `addCatalog/`,test)
     .then(data => {
       commit('add',data);
     })
@@ -16,6 +16,13 @@ const addCatalog = ({ commit },item) => {
 const addBrand = ({commit},data) => {
   console.log(data._id,'+',data.model);
   api.request('post', `addBrand/${data._id}`,data.model)
+    .then(response => {
+      commit('DELETE', response)
+    })
+}
+
+const addService = ({commit},data) => {
+  api.request('post', 'addService',data)
     .then(response => {
       commit('DELETE', response)
     })
@@ -43,21 +50,34 @@ const deleteCatalog = ({commit}, id) => {
     })
 }
 const deleteModel = ({commit}, data) => {
-  console.log(data._id,'+',data.model);
   api.request('delete', `model/${data._id}`, data)
     .then(data => {
       commit('DELETE', data)
     })
 }
 
+const deleteService = ({commit}, data) => {
+  api.request('delete', `service/${data._id}`, data)
+    .then(data => {
+      commit('DELETE', data)
+    })
+}
+
+const editModel = ({commit}, data)=>{
+  commit('MODEL', data)
+}
+
 export default {
-  test,
   addCatalog,
   addBrand,
   signIn,
   catalog,
   deleteCatalog,
   deleteModel,
+  deleteService,
+  editModel,
+  addService,
+  getCatalog,
 
   
 }

@@ -33,6 +33,9 @@ export default {
     addComponent,
     catalog,
   },
+  created(){
+    this.$store.dispatch('catalog')
+  },
   methods: {
     SingOut(){
       const sv = this;

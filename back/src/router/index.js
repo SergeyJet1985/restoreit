@@ -9,7 +9,22 @@ const isAdmin = function(id){
     return true
   }
   return false
-} 
+};
+const hostUrl='http://localhost/'
+const multer  =   require('multer');
+const fs = require('fs');
+const path = require('path')
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, __dirname+'/storageLocal')
+  },
+  filename: function (req, file, cb) {
+    let extArray = file.mimetype.split("/");
+    let extension = extArray[extArray.length - 1];
+    const filename = file.fieldname + '-' + Date.now()+'.'+extension;
+      cb(null,filename);
+  }
+})
 
 const admin = {
   login:'admin',
@@ -60,7 +75,6 @@ class Routes {
     });
     
     this.httpServer.post('/user/login', async (req, res) => {
-      console.log (req.body);
       const user =req.body;
       if (!user) {
         console.log(user, 'notlogin');
@@ -68,10 +82,10 @@ class Routes {
       }
       if (admin.password === user.password) {
         const payload = 
-        { id: user._id,
-          login: user.login,
+        { login: user.login,
           verifyKey: this.auth.verifyKey,
         };
+        console.log(payload);
         const token = jwt.sign(payload, this.auth.jwtOptions.secretOrKey);
         res.json({ message: 'ok', name: user.login , token});
       } else {
@@ -119,14 +133,44 @@ class Routes {
       });
     });
 
-    this.httpServer.post('/addCatalog/:id', this.bodyParser.json(),this.bodyParser.json(),this.passport.authenticate('jwt', { session: false }), async (req, res) => {
-      const _ = await this.projectController.create(req.params.id);
-      res.send({ status: 'ok' });
+    this.httpServer.post('/addCatalog',this.bodyParser.json(),this.passport.authenticate('jwt', { session: false }),async (req,res) =>{
+      var upload = multer({storage:storage}).single('file')
+      upload(req,res, async (err) => {
+        if(err) {
+            console.log(err);
+            return res.end("Error uploading file.");
+        }
+        const data = {
+          name: req.body.name,
+          img:hostUrl+req.file.filename,
+        } 
+        const _ = await this.projectController.create(data);       
+        res.end("File is uploaded");
+      });
     });
 
-    this.httpServer.post('/addBrand/:id', this.bodyParser.json(), async (req, res) => {
-      const _ = await this.projectController.update({
-        _id: req.params.id,
+    this.httpServer.post('/addBrand/:id',this.bodyParser.json(),this.passport.authenticate('jwt', { session: false }),async (req,res) =>{
+      console.log(req.body,req.params.id);
+      var upload = multer({storage:storage}).single('file')
+      upload(req,res, async (err) => {
+        if(err) {
+            console.log(err);
+            return res.end("Error uploading file.");
+        }
+        const data = {
+          name: req.body.name,
+          img:hostUrl+req.file.filename,
+        };
+        const _ = await this.projectController.update({_id:req.params.id},data);
+        console.log(req.body,req.params.id);
+        res.end("File is uploaded");
+      });
+    });
+
+    this.httpServer.post('/addService', this.bodyParser.json(),this.passport.authenticate('jwt', { session: false }), async (req, res) => {
+      console.log(req.body);
+      const _ = await this.projectController.addService({
+        _id: req.body._id,
       }, req.body);
       res.send({ status: 'ok' });
     });
@@ -145,7 +189,6 @@ class Routes {
     });
 
     this.httpServer.delete('/model/:id',this.bodyParser.json(),this.passport.authenticate('jwt', { session: false }), this.bodyParser.json(), async (req, res) => {
-      console.log(req.params.id,'+',req.body)
       const result = await this.projectController.removeModel({
         _id: req.params.id,
         model:req.body.model
@@ -158,6 +201,18 @@ class Routes {
       res.send({ status: 'ok' });
     });
 
+    this.httpServer.delete('/service/:id',this.bodyParser.json(),this.passport.authenticate('jwt', { session: false }), this.bodyParser.json(), async (req, res) => {
+      const result = await this.projectController.removeModel({
+        _id: req.params.id,
+        model:req.body.model
+      });
+      // if (result){
+      //   this.io.sockets.in(req.user.login).emit('message', {msg: 'Проект '+req.body.name+' успешно удален'}); 
+      // }else{
+      //   this.io.sockets.in(req.user.login).emit('message', {msg: 'Проект '+req.body.name+' не удален'});
+      // }
+      res.send({ status: 'ok' });
+    });
 
     this.http.listen(this.config.port, '0.0.0.0', (err) => {
       if (err) {

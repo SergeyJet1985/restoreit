@@ -13,6 +13,9 @@
         <v-card-title class="headline">Добавление компонента</v-card-title> 
         <v-card-actions>
           <v-layout align-center justify-center column>
+            <form id="uploadForm" name="uploadForm" enctype="multipart/form-data">
+              <input type="file" id="file" name="userFile">
+            </form>
           <v-text-field
             v-model="name"
             label="Название каталога"
@@ -30,6 +33,8 @@
   </div>
 </template>
 <script>
+import axios from 'axios';
+
 export default {
   name:'addComponent',
   data(){
@@ -46,15 +51,18 @@ export default {
   methods: {
     Add(){
       this.dialog = false;
-      const item= this.name;
-      if (this.typeAdd === 'Catalog'){  //на сервере вызовется create
-        this.$store.dispatch('addCatalog', item);
-      }
-      if (this.typeAdd === 'Brand'){  //на сервере вызовется insert
-
-      }
-      this.name = null;
-    },
+      const upload = new FormData();
+      const imagefile = document.querySelector('#file');
+      const catalogname = this.name
+      upload.append('file', imagefile.files[0]);
+      upload.append("name", catalogname);
+      axios.post('http://localhost:3000/addCatalog', upload, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              'Authorization': `jwt ${localStorage.getItem('token')}`,
+            }
+          })
+    }
   },
 }
 </script>

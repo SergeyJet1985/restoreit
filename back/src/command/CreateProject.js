@@ -10,10 +10,8 @@ class CreateProject {
   }
 
   async execute(params) {
-    this.logger.debug('CreateProject', params);
-    const collection = { catalog: params};
+    const collection = { catalog: params.name, img:params.img};
     const result = await this.projectModel.insert(collection);
-    this.logger.debug('CreateProject 2', params);
     return true;
   }
 }

@@ -9,7 +9,7 @@ const verifyKey = 'ArealGroup'
 
 
 const strategy = new JwtStrategy(jwtOptions, ((jwt_payload, next) => {
-  console.log(jwt_payload);
+
   if (jwt_payload.verifyKey === verifyKey){
     next(null, jwt_payload);
   } else {

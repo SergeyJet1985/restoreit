@@ -14,17 +14,17 @@
       <v-card>
         <v-card-text v-if="item.model" class="card__item">
         <v-layout v-for="model in item.model" :key="model.name" class="item" align-center row>
-          <v-flex xs10  >
+          <v-flex lg10  >
             {{model.name}}
           </v-flex>
-          <v-flex xs2>
+          <v-flex lg2>
             <v-btn fab dark small color="green">
               <v-icon dark>add</v-icon>
             </v-btn>
             <v-btn @click="deleteModel(item._id, model.name)" fab dark small color="pink">
               <v-icon dark>remove</v-icon>
             </v-btn>
-            <v-btn fab dark small color="cyan">
+            <v-btn @click="editModel(item._id, model)" fab dark small color="cyan">
               <v-icon dark>edit</v-icon>
             </v-btn>
           </v-flex>
@@ -35,6 +35,7 @@
           <v-btn @click="addBrand(item._id)" outline fab dark small color="blue darken-1">
             <v-icon dark>add</v-icon>
           </v-btn>
+          <input type="file" id="fileBrand" name="userFile">
           <v-text-field
             v-model="name"
             label="Модель"
@@ -49,10 +50,13 @@
 
 
 <script>
+import axios from 'axios';
+import addBrand from './addBrand';
 
 export default {
   name:'CatalogAdmin',
   compontents:{
+    addBrand,
   },
   data(){
     return{
@@ -66,7 +70,7 @@ export default {
   methods:{
     deleteModel(id, brand){
       const model = {
-        _id:id,
+        id:id,
         model:brand
       }
       this.$store.dispatch('deleteModel', model);
@@ -74,16 +78,32 @@ export default {
     removeCatalog(id){
       this.$store.dispatch('deleteCatalog', id);
     },
+    editModel(id,item){
+      const modelData={
+        id:id,
+        name:item.name,
+        img:item.img,
+        service:item.service,
+      }
+      this.$store.dispatch('editModel', modelData);
+    },
     addBrand(id){
-      const sv = this.name;
-      const model = {model:{
-        name:this.name
-      }}
+      const upload = new FormData();
+      const imagefile = document.querySelector('#fileBrand');
+      upload.append('file', imagefile.files[0]);
+      const model = {name:this.name}
       const data = {
         _id:id,
         model:model,
       }
-      this.$store.dispatch('addBrand', data);
+      console.log(model);
+      upload.append("name", this.name);
+      axios.post(`http://localhost:3000/addBrand/${id}`, upload, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              'Authorization': `jwt ${localStorage.getItem('token')}`,
+            }
+          })
     }
   }
 }

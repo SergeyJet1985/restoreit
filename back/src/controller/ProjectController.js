@@ -29,6 +29,10 @@ class  ProjectModel {
     return await this.updateProject.execute(filter, update);
   }
 
+  async addService(filter, update) {
+    return await this.updateProject.executeService(filter, update);
+  }
+
   async create(params) {
     return await this.createProject.execute(params);
   }
@@ -40,6 +44,10 @@ class  ProjectModel {
 
   async removeModel(params) {
     return await this.deleteModel.execute(params);
+  }
+
+  async removeService(params) {
+    return await this.deleteModel.executeService(params);
   }
 
 }

@@ -8,4 +8,9 @@ export default {
   smartphone,
   catalog: [],
   JWT:localStorage.getItem('token'),
+  model:{
+    id:undefined,
+    name:undefined,
+    service:undefined,
+  }
 }

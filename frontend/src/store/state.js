@@ -9,6 +9,7 @@ export default {
   category:{},
   catalog: [],
   JWT:localStorage.getItem('token'),
+  service:{},
   model:{
     id:undefined,
     name:undefined,

@@ -4,6 +4,10 @@ const loadCategory = ({commit},index) =>{
   commit('CATEGORY_LOAD',index)
 }
 
+const loadModel = ({commit},model) =>{
+  commit('MODEL_LOAD',model)
+}
+
 const getCatalog = ({ commit },test) => {
   api.request('getCatalog')
     .then(data => {
@@ -91,6 +95,7 @@ export default {
   addService,
   getCatalog,
   loadCategory,
+  loadModel,
 
   
 }

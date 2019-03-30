@@ -4,6 +4,7 @@ import Home from './page/home'
 import catalog from './page/catalog'
 import Panel from './panel/Panel'
 import model from './panel/model'
+import service from './page/service'
 
 Vue.use(Router)
 
@@ -30,6 +31,11 @@ export default new Router({
       path: '/catalog',
       name: 'catalog',
       component: catalog
+    },
+    {
+      path: '/service',
+      name: 'service',
+      component: service
     },
   ]
 })

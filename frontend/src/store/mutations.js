@@ -14,6 +14,11 @@ export default {
     state.category = state.catalog[index];
     // state.appStatus = payload;
    },
+
+  MODEL_LOAD(state, model) {
+  state.service = model;
+  // state.appStatus = payload;
+  },
   
   add(state, item) {
     console.log('ss',item)

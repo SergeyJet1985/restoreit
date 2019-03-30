@@ -9,8 +9,27 @@ const isAdmin = function(id){
     return true
   }
   return false
-} 
+};
+const hostUrl='http://localhost/'
+const multer  =   require('multer');
+const fs = require('fs');
+const path = require('path')
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, __dirname+'/storageLocal')
+  },
+  filename: function (req, file, cb) {
+    let extArray = file.mimetype.split("/");
+    let extension = extArray[extArray.length - 1];
+    const filename = file.fieldname + '-' + Date.now()+'.'+extension;
+      cb(null,filename);
+  }
+})
 
+const admin = {
+  login:'admin',
+  password: 'restoreit1989'
+}
 
 class Routes {
   constructor({
@@ -43,23 +62,30 @@ class Routes {
       return this.passport.authenticate('jwt', { session: false });
     };
     
-    this.httpServer.all('/', function(req, res, next) {
+    // this.httpServer.all('/', function(req, res, next) {
+    //   res.header("Access-Control-Allow-Origin", "*");
+    //   res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    // });
+    
+    this.httpServer.use(function(req, res, next) {
       res.header("Access-Control-Allow-Origin", "*");
-      res.header("Access-Control-Allow-Headers", "X-Requested-With");
+      res.header ('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS');
+      res.header("Access-Control-Allow-Headers", "Origin, Authorization, X-Requested-With, Content-Type, Accept");
+      next();
     });
-
+    
     this.httpServer.post('/user/login', async (req, res) => {
       const user =req.body;
       if (!user) {
         console.log(user, 'notlogin');
         res.status(401).json({ message: 'no such user found' });
       }
-      if (user.password === req.body.password) {
+      if (admin.password === user.password) {
         const payload = 
-        { id: user._id,
-          login: user.login,
+        { login: user.login,
           verifyKey: this.auth.verifyKey,
         };
+        console.log(payload);
         const token = jwt.sign(payload, this.auth.jwtOptions.secretOrKey);
         res.json({ message: 'ok', name: user.login , token});
       } else {
@@ -81,16 +107,23 @@ class Routes {
       });
     });
 
+    this.httpServer.get('/test',this.bodyParser.json(),this.passport.authenticate('jwt', { session: false }), async (req, res) => {
+      this.logger.info(`получил`);
+      res.send({
+        status: 'ok',
+        text:'заебись',
+      });
+    });
 
-    this.httpServer.get('/catalog',this.bodyParser.json(),this.passport.authenticate('jwt', { session: false }), async (req, res) => {
-      const data = await this.projectController.getList(req.user.id);
+    this.httpServer.get('/catalogs',this.bodyParser.json(), async (req, res) => {
+      const data = await this.projectController.getList();
       res.send({
         status: 'ok',
         data,
       });
     });
     
-    this.httpServer.get('/catalog/:brand',this.bodyParser.json(),this.passport.authenticate('jwt', { session: false }), async (req, res) => {
+    this.httpServer.get('/catalogs/:brand',this.bodyParser.json(),this.passport.authenticate('jwt', { session: false }), async (req, res) => {
       const data = await this.projectController.get({
         brand:req.params.brand,
       });
@@ -100,25 +133,87 @@ class Routes {
       });
     });
 
-    this.httpServer.post('/projects', this.bodyParser.json(),this.bodyParser.json(),this.passport.authenticate('jwt', { session: false }), async (req, res) => {
-      this.io.sockets.in(req.user.login).emit('message', {msg: 'Проект '+req.body.name+' успешно создан'});
-      const dataProject= req.body;
-      dataProject.id=req.user.id;
-      const _ = await this.projectController.create(req.body);
-      res.send({ status: 'ok' });
+    this.httpServer.post('/addCatalog',this.bodyParser.json(),this.passport.authenticate('jwt', { session: false }),async (req,res) =>{
+      var upload = multer({storage:storage}).single('file')
+      upload(req,res, async (err) => {
+        if(err) {
+            console.log(err);
+            return res.end("Error uploading file.");
+        }
+        const data = {
+          name: req.body.name,
+          img:hostUrl+req.file.filename,
+        } 
+        const _ = await this.projectController.create(data);       
+        res.end("File is uploaded");
+      });
     });
 
-    this.httpServer.post('/projects/:id', this.bodyParser.json(), async (req, res) => {
-      const _ = await this.projectController.update({
-        _id: req.params.id,
+    this.httpServer.post('/addMark', this.bodyParser.json(),this.passport.authenticate('jwt', { session: false }), async (req, res) => {
+      const _ = await this.projectController.addMark({
+        _id: req.body._id,
       }, req.body);
       res.send({ status: 'ok' });
     });
 
-    this.httpServer.delete('/projects/:id',this.bodyParser.json(),this.passport.authenticate('jwt', { session: false }), this.bodyParser.json(), async (req, res) => {
+    this.httpServer.post('/addBrand/:id',this.bodyParser.json(),this.passport.authenticate('jwt', { session: false }),async (req,res) =>{
+      var upload = multer({storage:storage}).single('file')
+      upload(req,res, async (err) => {
+        if(err) {
+            console.log(err);
+            return res.end("Error uploading file.");
+        }
+        const data = {
+          name: req.body.name,
+          img:hostUrl+req.file.filename,
+          mark:req.body.mark,
+        };
+        const _ = await this.projectController.update({_id:req.params.id},data);
+        res.end("File is uploaded");
+      });
+    });
+
+    this.httpServer.post('/addService', this.bodyParser.json(),this.passport.authenticate('jwt', { session: false }), async (req, res) => {
+      const _ = await this.projectController.addService({
+        _id: req.body._id,
+      }, req.body);
+      res.send({ status: 'ok' });
+    });
+
+    this.httpServer.delete('/catalog/:id',this.bodyParser.json(),this.passport.authenticate('jwt', { session: false }), this.bodyParser.json(), async (req, res) => {
+      console.log(123)
       const result = await this.projectController.delete({
         _id: req.params.id,
-        password: req.body.password,
+      });
+      // if (result){
+      //   this.io.sockets.in(req.user.login).emit('message', {msg: 'Проект '+req.body.name+' успешно удален'}); 
+      // }else{
+      //   this.io.sockets.in(req.user.login).emit('message', {msg: 'Проект '+req.body.name+' не удален'});
+      // }
+      res.send({ status: 'ok' });
+    });
+
+    this.httpServer.delete('/model/:id',this.bodyParser.json(),this.passport.authenticate('jwt', { session: false }), this.bodyParser.json(), async (req, res) => {
+      console.log(req.body);
+      const result = await this.projectController.removeModel({
+        _id: req.body.id,
+        model:req.body.model
+      });
+      // if (result){
+      //   this.io.sockets.in(req.user.login).emit('message', {msg: 'Проект '+req.body.name+' успешно удален'}); 
+      // }else{
+      //   this.io.sockets.in(req.user.login).emit('message', {msg: 'Проект '+req.body.name+' не удален'});
+      // }
+      res.send({ status: 'ok' });
+    });
+
+    this.httpServer.delete('/service/:id',this.bodyParser.json(),this.passport.authenticate('jwt', { session: false }), this.bodyParser.json(), async (req, res) => {
+      console.log(req.body)
+      const result = await this.projectController.removeService({
+        id: req.body._id,
+        name:req.body.name,
+        product:req.body.product,
+        price:req.body.price,
       });
       if (result){
         this.io.sockets.in(req.user.login).emit('message', {msg: 'Проект '+req.body.name+' успешно удален'}); 
@@ -127,7 +222,6 @@ class Routes {
       }
       res.send({ status: 'ok' });
     });
-
 
     this.http.listen(this.config.port, '0.0.0.0', (err) => {
       if (err) {

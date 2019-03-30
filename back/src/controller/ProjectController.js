@@ -7,12 +7,14 @@ class  ProjectModel {
     updateProject,
     createProject,
     deleteProject,
+    deleteModel,
   }) {
     this.getProjects = getProjects;
     this.getProject = getProject;
     this.updateProject = updateProject;
     this.createProject = createProject;
     this.deleteProject = deleteProject;
+    this.deleteModel = deleteModel;
   }
 
   async getList(user) {
@@ -27,6 +29,14 @@ class  ProjectModel {
     return await this.updateProject.execute(filter, update);
   }
 
+  async addService(filter, update) {
+    return await this.updateProject.executeService(filter, update);
+  }
+
+  async addMark(filter, update) {
+    return await this.updateProject.executeMark(filter, update);
+  }
+
   async create(params) {
     return await this.createProject.execute(params);
   }
@@ -34,6 +44,14 @@ class  ProjectModel {
 
   async delete(params) {
     return await this.deleteProject.execute(params);
+  }
+
+  async removeModel(params) {
+    return await this.deleteModel.execute(params);
+  }
+
+  async removeService(params) {
+    return await this.deleteModel.executeService(params);
   }
 
 }

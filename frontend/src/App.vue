@@ -21,6 +21,7 @@
 <script>
 import navigationLink from './components/navigation/navigationLink'
 import navigationButton from './components/navigation/navigationButton'
+
 export default {
   data: () => ({
       drawer: false

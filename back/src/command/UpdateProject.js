@@ -15,6 +15,22 @@ class UpdateProject {
     await this.projectModel.findOneAndUpdate(filter, update);
     return true;
   }
+
+  async executeService(filter, update) {
+    const id = update.id;
+    delete(update.id);
+    await this.projectModel.findOneAndUpdateService(filter, update);
+    return true;
+  }
+
+  async executeMark(filter, update) {
+    const id = update.id;
+    delete(update.id);
+    await this.projectModel.findOneAndUpdateMark(filter, update);
+    return true;
+  }
+
+  
 }
 
 module.exports = UpdateProject;

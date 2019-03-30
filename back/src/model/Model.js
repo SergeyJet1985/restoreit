@@ -38,20 +38,95 @@ class Model {
   async findOneAndUpdate(filter, update, params) {
     filter={
       _id: filter._id,
-      password:update.password
       }
-     //console.log('findOneAndUpdate', filter, update);
+    update = {
+      model:{
+        name:update.name,
+        img:update.img,
+        mark:update.mark,
+      }
+    }
     const result = await this.db.get()
       .collection(this.collectionName)
       .findOneAndUpdate(
         this.getFilter(filter), {
-          $set: update
+          $addToSet: update
         }, 
         params
       )
       .catch(err => {
         console.log(err);
       });
+    return result;
+  }
+
+  async findOneAndUpdateService(filter, update, params) {
+    const addService = {
+          product: update.product,
+          price:update.price,  
+    }
+    const search = this.getFilter(filter)
+    const result = await this.db.get()
+      .collection(this.collectionName)
+      .findOneAndUpdate(
+        {'_id':filter._id,'model.name':update.name}, {
+          $addToSet: { "model.$.service": addService } 
+        }, 
+      )
+      .catch(err => {
+        console.log(err);
+      });
+    return result;
+  }
+
+  async findOneAndUpdateMark(filter, update, params) {
+   console.log(filter,'+',update)
+   const mark={
+     Marks:update.mark
+   }
+   const result = await this.db.get()
+     .collection(this.collectionName)
+     .findOneAndUpdate(
+      this.getFilter(filter), {
+         $addToSet: mark  
+       }, 
+     )
+     .catch(err => {
+       console.log(err);
+     });
+   return result;
+ }
+
+
+  async Insert(filter, update, params) {
+    filter={
+      _id: filter._id
+      }
+    const result = await this.db.get()
+      .collection(this.collectionName)
+      .findOneAndUpdate(
+        filter, {
+          $addToSet: {
+            models: {
+             ...update
+            },
+          },
+        }, 
+        params
+      )
+      .catch(err => {
+        console.log(err);
+      });
+      if(result.value == null){
+          const resultInsert = await this.db.get()
+            .collection(this.collectionName)
+            .insertOne(filter)
+            .catch(err => {
+              console.log(err);
+            });
+          return resultInsert;
+        
+      }
     return result;
   }
   async findOneAndInsert(filter, update, params) {
@@ -62,7 +137,7 @@ class Model {
       .collection(this.collectionName)
       .findOneAndUpdate(
         this.getFilter(filter), {
-          $set: update
+          $push: update
         }, 
         params
       )
@@ -71,7 +146,7 @@ class Model {
     return result;
   }
 
-  async insertOne(params) {
+  async insert(params) {
     const result = await this.db.get()
       .collection(this.collectionName)
       .insertOne(params)
@@ -88,7 +163,56 @@ class Model {
       .catch(err => {
         console.log(err);
       });
+  
     if (result.result.n===0){return false}
+    return true
+  }
+
+  async deleteOneModel(params) {
+    const filter={
+      _id: params._id,
+      }
+    const modelDelete = {
+      name : params.model
+    }
+    console.log(params.id);
+    const result = await this.db.get()
+      .collection(this.collectionName)
+      .update(
+        this.getFilter(filter), {
+          $pull: {model:{'name':params.model}},
+        }, 
+        params
+      )
+      .catch(err => {
+        console.log(err);
+      });
+  
+    return true
+  }
+
+  async deleteOneService(params) {
+    const filter={
+      _id: params.id,
+      }
+    const modelDelete = {
+      name : params.model
+    }
+    console.log(filter, params);
+    const result = await this.db.get()
+      .collection(this.collectionName)
+      .updateOne(
+        {"model.name":params.name}, {
+          $pull: {"model.$.service":{
+            'product':params.product,
+            'price':params.price,
+          }},
+        }, 
+      )
+      .catch(err => {
+        console.log(err);
+      });
+  
     return true
   }
 

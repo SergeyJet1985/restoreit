@@ -18,11 +18,11 @@ const httpServer = http.createServer(app);
 
 const io = socketIO(httpServer);
 
+
+
 app.use(express.static(path.join(__dirname, '../../frontend/dist')));
 
 app.enable('trust proxy');
-app.use(bodyParser.json());
-
 passport.use(auth);
 app.use(passport.initialize());
 app.use(bodyParser.urlencoded({

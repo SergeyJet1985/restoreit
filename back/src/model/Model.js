@@ -157,6 +157,7 @@ class Model {
     const modelDelete = {
       name : params.model
     }
+    console.log(params.id);
     const result = await this.db.get()
       .collection(this.collectionName)
       .update(
@@ -174,21 +175,21 @@ class Model {
 
   async deleteOneService(params) {
     const filter={
-      _id: params._id,
+      _id: params.id,
       }
     const modelDelete = {
       name : params.model
     }
+    console.log(filter, params);
     const result = await this.db.get()
       .collection(this.collectionName)
-      .update(
-        {'_id':filter._id,'model.name':update.name}, {
+      .updateOne(
+        {"model.name":params.name}, {
           $pull: {"model.$.service":{
             'product':params.product,
-            'price':params.price
+            'price':params.price,
           }},
         }, 
-        params
       )
       .catch(err => {
         console.log(err);

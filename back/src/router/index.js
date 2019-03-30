@@ -189,8 +189,9 @@ class Routes {
     });
 
     this.httpServer.delete('/model/:id',this.bodyParser.json(),this.passport.authenticate('jwt', { session: false }), this.bodyParser.json(), async (req, res) => {
+      console.log(req.body);
       const result = await this.projectController.removeModel({
-        _id: req.params.id,
+        _id: req.body.id,
         model:req.body.model
       });
       // if (result){
@@ -202,15 +203,18 @@ class Routes {
     });
 
     this.httpServer.delete('/service/:id',this.bodyParser.json(),this.passport.authenticate('jwt', { session: false }), this.bodyParser.json(), async (req, res) => {
-      const result = await this.projectController.removeModel({
-        _id: req.params.id,
-        model:req.body.model
+      console.log(req.body)
+      const result = await this.projectController.removeService({
+        id: req.body._id,
+        name:req.body.name,
+        product:req.body.product,
+        price:req.body.price,
       });
-      // if (result){
-      //   this.io.sockets.in(req.user.login).emit('message', {msg: 'Проект '+req.body.name+' успешно удален'}); 
-      // }else{
-      //   this.io.sockets.in(req.user.login).emit('message', {msg: 'Проект '+req.body.name+' не удален'});
-      // }
+      if (result){
+        this.io.sockets.in(req.user.login).emit('message', {msg: 'Проект '+req.body.name+' успешно удален'}); 
+      }else{
+        this.io.sockets.in(req.user.login).emit('message', {msg: 'Проект '+req.body.name+' не удален'});
+      }
       res.send({ status: 'ok' });
     });
 

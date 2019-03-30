@@ -116,7 +116,7 @@ export default {
       upload.append('file', imagefile.files[0]);
       upload.append("name", this.name);
       upload.append("mark", this.enterMark[i]);
-      axios.post(`http://localhost:3000/addBrand/${id}`, upload, {
+      axios.post(`http://194.5.157.38/addBrand/${id}`, upload, {
             headers: {
               'Content-Type': 'multipart/form-data',
               'Authorization': `jwt ${localStorage.getItem('token')}`,

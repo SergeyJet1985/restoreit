@@ -56,7 +56,7 @@ export default {
       const catalogname = this.name
       upload.append('file', imagefile.files[0]);
       upload.append("name", catalogname);
-      axios.post('http://localhost:3000/addCatalog', upload, {
+      axios.post('http://194.5.157.38/addCatalog', upload, {
             headers: {
               'Content-Type': 'multipart/form-data',
               'Authorization': `jwt ${localStorage.getItem('token')}`,

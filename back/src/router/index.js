@@ -115,7 +115,7 @@ class Routes {
       });
     });
 
-    this.httpServer.get('/catalogs',this.bodyParser.json(),this.passport.authenticate('jwt', { session: false }), async (req, res) => {
+    this.httpServer.get('/catalogs',this.bodyParser.json(), async (req, res) => {
       const data = await this.projectController.getList();
       res.send({
         status: 'ok',
@@ -149,8 +149,14 @@ class Routes {
       });
     });
 
+    this.httpServer.post('/addMark', this.bodyParser.json(),this.passport.authenticate('jwt', { session: false }), async (req, res) => {
+      const _ = await this.projectController.addMark({
+        _id: req.body._id,
+      }, req.body);
+      res.send({ status: 'ok' });
+    });
+
     this.httpServer.post('/addBrand/:id',this.bodyParser.json(),this.passport.authenticate('jwt', { session: false }),async (req,res) =>{
-      console.log(req.body,req.params.id);
       var upload = multer({storage:storage}).single('file')
       upload(req,res, async (err) => {
         if(err) {
@@ -160,15 +166,14 @@ class Routes {
         const data = {
           name: req.body.name,
           img:hostUrl+req.file.filename,
+          mark:req.body.mark,
         };
         const _ = await this.projectController.update({_id:req.params.id},data);
-        console.log(req.body,req.params.id);
         res.end("File is uploaded");
       });
     });
 
     this.httpServer.post('/addService', this.bodyParser.json(),this.passport.authenticate('jwt', { session: false }), async (req, res) => {
-      console.log(req.body);
       const _ = await this.projectController.addService({
         _id: req.body._id,
       }, req.body);

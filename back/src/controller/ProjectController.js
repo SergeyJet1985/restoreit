@@ -33,6 +33,10 @@ class  ProjectModel {
     return await this.updateProject.executeService(filter, update);
   }
 
+  async addMark(filter, update) {
+    return await this.updateProject.executeMark(filter, update);
+  }
+
   async create(params) {
     return await this.createProject.execute(params);
   }

@@ -21,6 +21,13 @@ const addBrand = ({commit},data) => {
     })
 }
 
+const addMark = ({commit},data) => {
+  api.request('post', `addMark/`,data)
+    .then(response => {
+      commit('DELETE', response)
+    })
+}
+
 const addService = ({commit},data) => {
   api.request('post', 'addService',data)
     .then(response => {
@@ -70,6 +77,7 @@ const editModel = ({commit}, data)=>{
 export default {
   addCatalog,
   addBrand,
+  addMark,
   signIn,
   catalog,
   deleteCatalog,

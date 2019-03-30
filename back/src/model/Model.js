@@ -39,11 +39,11 @@ class Model {
     filter={
       _id: filter._id,
       }
-     //console.log('findOneAndUpdate', filter, update);
     update = {
       model:{
         name:update.name,
         img:update.img,
+        mark:update.mark,
       }
     }
     const result = await this.db.get()
@@ -61,12 +61,10 @@ class Model {
   }
 
   async findOneAndUpdateService(filter, update, params) {
-     //console.log('findOneAndUpdate', filter, update);
     const addService = {
           product: update.product,
           price:update.price,  
     }
-    console.log(filter._id);
     const search = this.getFilter(filter)
     const result = await this.db.get()
       .collection(this.collectionName)
@@ -80,6 +78,26 @@ class Model {
       });
     return result;
   }
+
+  async findOneAndUpdateMark(filter, update, params) {
+   console.log(filter,'+',update)
+   const mark={
+     Marks:update.mark
+   }
+   const result = await this.db.get()
+     .collection(this.collectionName)
+     .findOneAndUpdate(
+      this.getFilter(filter), {
+         $addToSet: mark  
+       }, 
+     )
+     .catch(err => {
+       console.log(err);
+     });
+   return result;
+ }
+
+
   async Insert(filter, update, params) {
     filter={
       _id: filter._id

@@ -27,23 +27,8 @@ export default new Router({
       component: model
     },
     {
-      path: '/smartphone',
-      name: 'smartphone',
-      component: catalog
-    },
-    {
-      path: '/tablet',
-      name: 'tablet',
-      component: catalog
-    },
-    {
-      path: '/notebook',
-      name: 'notebook',
-      component: catalog
-    },
-    {
-      path: '/computer',
-      name: 'computer',
+      path: '/catalog',
+      name: 'catalog',
       component: catalog
     },
   ]

@@ -1,9 +1,9 @@
 <template>
   <div>
     <v-container class="block" grid-list-sm>
-            <v-layout row wrap >
-      <card v-for="item in Categoryis" :key="item.id" :title="item.title" :link="item.link" :img="item.img" :text="item.text" />
-            </v-layout>
+      <v-layout row wrap >
+        <card v-for="(item, i) in Categoryis" :key="i" :index="i" :title="item.catalog" :img="item.img" :marks="item.Marks" :model="item.models" />
+      </v-layout>
     </v-container> 
   </div>
 </template>
@@ -18,7 +18,7 @@ export default {
   },
   computed:{
     Categoryis(){
-        return this.$store.state.miniCategory.items
+        return this.$store.state.catalog
       },
   }
   

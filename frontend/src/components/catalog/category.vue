@@ -1,21 +1,23 @@
 <template>
   <v-tabs outline class="tabs" color="transparent" slider-color="blue"  centered>
     <v-tab
-      v-for="item in Categoryis"
-      :key="item.id"
+      v-for="item in Category.Marks"
+      :key="item"
     >
-      {{item.title}}
+      {{item}}
     </v-tab>
     <v-tab-item
-      v-for="item in Categoryis"
-      :key="item.id">
-        <v-card color="transparent" flat>
-          <v-container  grid-list-sm>
-            <v-layout class="block" align-start  wrap fill-height>
-              <list-category class="block__list" v-for="model in item.models" :key="model" :model="model" />
-            </v-layout>
-          </v-container>
-        </v-card>
+      v-for="(item) in Category.Marks"
+      :key="item">
+      <v-card color="transparent" flat>
+        <v-container  grid-list-sm>
+          <v-layout class="block" align-start  wrap fill-height>
+            <div v-for="model in Category.model" :key="model.name">            
+              <list-category class="block__list" v-if="model.mark==item" :model="model" /> 
+            </div>
+          </v-layout>
+        </v-container>
+      </v-card>
     </v-tab-item>
   </v-tabs>
   
@@ -31,8 +33,8 @@ export default {
     listCategory,
   },
   computed:{
-    Categoryis(){
-        return this.$store.state.smartphone.items
+    Category(){
+        return this.$store.state.category;
       },
   }
 }
@@ -44,13 +46,22 @@ export default {
 .tabs{
   background-color: none;
 }
-.block{
-  justify-content: start;
-  &__list{
-    margin: 15px;
+.container{
+  .grid-list-sm{
+    .block{
+      justify-content: start;
+      &__list{
+        margin: 15px;
+      }
+    }
   }
 }
+ 
+
 @media only screen and (max-width: 769px) {
+  .tabs{
+    padding-bottom:25px;
+  }
   .card{
   width: 100px;
   }
@@ -58,6 +69,7 @@ export default {
   justify-content: center;
   &__list{
     margin: 15px;
+    
   }
   }
 }

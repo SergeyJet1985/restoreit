@@ -1,5 +1,9 @@
 import api from '../api/api';
 
+const loadCategory = ({commit},index) =>{
+  commit('CATEGORY_LOAD',index)
+}
+
 const getCatalog = ({ commit },test) => {
   api.request('getCatalog')
     .then(data => {
@@ -86,6 +90,7 @@ export default {
   editModel,
   addService,
   getCatalog,
+  loadCategory,
 
   
 }

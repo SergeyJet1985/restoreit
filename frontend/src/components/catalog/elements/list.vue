@@ -89,6 +89,14 @@ h3{
   font-size: 16px;
   }
 }
+@media only screen and (min-width: 800px) {
+  .container{
+    .v-card{
+      margin-top:16px;
+    }
+  }
+  
+}
 </style>
 
 

@@ -1,5 +1,13 @@
 import api from '../api/api';
 
+const send = ({commit},message) =>{
+  api.request('post', `send`,message)
+    .then(data => {
+      commit('DELETE',data)
+    })
+}
+
+
 const loadCategory = ({commit},index) =>{
   commit('CATEGORY_LOAD',index)
 }
@@ -96,6 +104,7 @@ export default {
   getCatalog,
   loadCategory,
   loadModel,
+  send,
 
   
 }

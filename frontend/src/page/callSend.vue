@@ -60,7 +60,7 @@
 
 <script>
   export default {
-    name:'call  ',
+    name:'callSend',
     data: () => ({
       send:true,
       valid: true,
@@ -79,13 +79,21 @@
         v => !!v || 'Адрес электронной почты не верный',
         v => /.+@.+/.test(v) || 'Введите адрес почты'
       ],
+      checkbox: false,
     }),
 
     methods: {
       validate () {
         if (this.$refs.form.validate()) {
-          this.$refs.form.reset()
-          this.send = false;
+         // this.$refs.form.reset()
+         // this.send = false;
+          const message ={
+            name:this.name,
+            mail:this.email,
+            call:this.call,
+          }
+          console.log(message);
+          this.$store.dispatch('send',message)
         }
       },
       reset () {

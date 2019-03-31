@@ -1,3 +1,9 @@
+const workMail = {
+  user: 'restoreit.node@gmail.com', 
+  pass: 'restoreit19895',
+  adress: 'bingo7696@gmail.com',
+}
+
 const jwt = require('jsonwebtoken');
 const Admins = [
   '5c87a19084ddc510b92b87c3',
@@ -25,6 +31,15 @@ const storage = multer.diskStorage({
       cb(null,filename);
   }
 })
+const nodemailer = require ('nodemailer');
+const transporter = nodemailer.createTransport ({ 
+  service: 'gmail', 
+  auth: { 
+          user: workMail.user, 
+          pass: workMail.pass, 
+      } 
+  });
+
 
 const admin = {
   login:'admin',
@@ -92,6 +107,27 @@ class Routes {
         console.log(user, 'notpassword');
         res.status(401).json({ message: 'passwords did not match' });
       }
+    });
+
+    this.httpServer.post('/send',this.bodyParser.json(), async (req, res) => {
+      console.log(req.body);
+      const message ='<p>Имя:'+req.body.name+'</p>'+'<p>Е-мейл клиента :'+req.body.mail+'</p><p> Номер телефона:'+req.body.call+'</p>';
+      const mailOptions = {
+        from: workMail.user, // sender address
+        to: workMail.adress, // list of receivers
+        subject: 'Заказ', // Subject line
+        html: message// plain text body
+      };
+      transporter.sendMail(mailOptions, function (err, info) {
+        if(err){
+          console.log(err);
+          res.send({ status: 'not' });
+        }
+        else{
+          console.log(info);
+          res.send({ status: 'ok' });
+        }
+     });
     });
 
 

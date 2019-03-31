@@ -87,6 +87,18 @@ export default {
     }
   }
 }
-
-
+@media only screen and (max-width: 640px) {
+  #app {
+    .block__footer{
+      width: 100%;
+      height:auto;
+      padding: 15px;
+      display: -webkit-flex; 
+      -webkit-flex-direction: column;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+  }
+}
 </style>

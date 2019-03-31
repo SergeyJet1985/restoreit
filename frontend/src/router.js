@@ -5,6 +5,7 @@ import catalog from './page/catalog'
 import Panel from './panel/Panel'
 import model from './panel/model'
 import service from './page/service'
+import call from './page/call'
 
 Vue.use(Router)
 
@@ -16,6 +17,11 @@ export default new Router({
       path: '/',
       name: 'home',
       component: Home
+    },
+    {
+      path: '/call',
+      name: 'call',
+      component: call
     },
     {
       path: '/admin/panel',

@@ -8,15 +8,9 @@ export default {
       },
       {
         id:2,
-        link: 'price',
-        title: 'Контакты',
-        icon:'settings',
-      },
-      {
-        id:3,
-        link: 'price',
+        link: 'call',
         title: 'Заказать звонок',
-        icon:'settings',
+        icon:'call',
       },
 
   ]

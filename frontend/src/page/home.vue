@@ -70,5 +70,18 @@ export default {
   }
 }
 
+@media only screen and (max-width: 640px) {
+  .block{
+    &__company{
+      display: none;
+    }
+    &__footer{
+      &-text{
+        font-size: 15px;
+      }
+    }
+  }
+}
+
 </style>
 

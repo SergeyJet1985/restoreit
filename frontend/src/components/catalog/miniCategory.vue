@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-container class="block" grid-list-sm>
-      <v-layout row wrap >
+      <v-layout  row wrap >
         <card v-for="(item, i) in Categoryis" :key="i" :index="i" :title="item.catalog" :img="item.img" :marks="item.Marks" :model="item.models" />
       </v-layout>
     </v-container> 
@@ -28,5 +28,10 @@ export default {
 <style lang="scss">
 .block{
   margin-top:40px;
+}
+@media only screen and (max-width: 640px) {
+  .block{
+    margin-top:0;
+  }
 }
 </style>

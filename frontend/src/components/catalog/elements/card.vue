@@ -86,6 +86,7 @@ export default {
       .layout{
         .flex.xs2{
           max-width: none;
+          
         }
         .card{
           width: auto;

@@ -13,14 +13,14 @@
         <v-card-title class="headline">Добавление компонента</v-card-title> 
         <v-card-actions>
           <v-layout align-center justify-center column>
-            <form id="uploadForm" name="uploadForm" enctype="multipart/form-data">
-              <input type="file" id="file" name="userFile">
-            </form>
           <v-text-field
             v-model="name"
             label="Название каталога"
             required
           ></v-text-field>
+          <form id="uploadForm" name="uploadForm" enctype="multipart/form-data">
+            <input type="file" id="file" name="userFile">
+          </form>
           <v-spacer></v-spacer>
           <v-flex xs12>
           <v-btn v-if="name" outline color="green darken-1" text @click="Add()">Создать</v-btn>
@@ -56,7 +56,7 @@ export default {
       const catalogname = this.name
       upload.append('file', imagefile.files[0]);
       upload.append("name", catalogname);
-      axios.post('http://localhost:3000/addCatalog', upload, {
+      axios.post('http://194.5.157.38:3000/addCatalog', upload, {
             headers: {
               'Content-Type': 'multipart/form-data',
               'Authorization': `jwt ${localStorage.getItem('token')}`,

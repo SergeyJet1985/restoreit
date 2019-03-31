@@ -10,7 +10,7 @@
             </v-img>
             <v-card-title primary-title>
               <div>
-                <h3 class="text-xs-center" >{{model.mark}}{{model.name}}</h3>
+                <h3 class="text-xs-center" >{{model.name}}</h3>
               </div>
             </v-card-title>
             <v-expand-transition>

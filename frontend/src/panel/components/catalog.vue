@@ -40,21 +40,21 @@
         </v-card-text>
          <v-card-text  class="card__item">
         <v-layout class="item" justify-start align-center row>
-          <v-btn @click="addBrand(item._id,i)" outline fab dark small color="blue darken-1">
-            <v-icon dark>add</v-icon>
-          </v-btn>
           <v-select
             v-model="enterMark[i]"
             :items="item.Marks"
             label="Марка"
             outline
           ></v-select>
-          <input type="file" id="fileBrand" name="userFile">
           <v-text-field
             v-model="name"
             label="Модель"
             required
           ></v-text-field>
+          <input type="file" id="fileBrand" name="userFile">
+          <v-btn @click="addBrand(item._id,i)" outline fab dark small color="blue darken-1">
+            <v-icon dark>add</v-icon>
+          </v-btn>
         </v-layout>
         </v-card-text> 
       </v-card>
@@ -116,7 +116,7 @@ export default {
       upload.append('file', imagefile.files[0]);
       upload.append("name", this.name);
       upload.append("mark", this.enterMark[i]);
-      axios.post(`http://localhost:3000/addBrand/${id}`, upload, {
+      axios.post(`http://194.5.157.38:3000/addBrand/${id}`, upload, {
             headers: {
               'Content-Type': 'multipart/form-data',
               'Authorization': `jwt ${localStorage.getItem('token')}`,

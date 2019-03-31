@@ -20,7 +20,7 @@
             style="height: 100%;"
           >
             <v-btn outline class="card__icon" color="white card__icon">
-              <span>Перейти</span>
+              <span class="icon_text">Перейти</span>
               <v-icon >skip_next</v-icon>
             </v-btn>
           </div>
@@ -63,10 +63,16 @@ export default {
     opacity: 1;
   }
 }
+
+.icon_text{
+  color: white;
+}
+
 .v-content__wrap{
   .container{
     .layout{
       .card{
+        color: white;
         margin-top:25px;
       }
     }
@@ -80,6 +86,7 @@ export default {
       .layout{
         .flex.xs2{
           max-width: none;
+          
         }
         .card{
           width: auto;

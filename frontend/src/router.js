@@ -4,6 +4,8 @@ import Home from './page/home'
 import catalog from './page/catalog'
 import Panel from './panel/Panel'
 import model from './panel/model'
+import service from './page/service'
+import callSend from './page/callSend'
 
 Vue.use(Router)
 
@@ -15,6 +17,11 @@ export default new Router({
       path: '/',
       name: 'home',
       component: Home
+    },
+    {
+      path: '/call',
+      name: 'callSend',
+      component: callSend
     },
     {
       path: '/admin/panel',
@@ -30,6 +37,11 @@ export default new Router({
       path: '/catalog',
       name: 'catalog',
       component: catalog
+    },
+    {
+      path: '/service',
+      name: 'service',
+      component: service
     },
   ]
 })

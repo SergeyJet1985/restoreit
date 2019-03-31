@@ -66,14 +66,14 @@ export default {
 <style lang="scss">
 .window{
   height: 100%;
+  max-width: calc(100% - 50px);
   &__block{
     padding: 20px;
-    border: 2px solid black;
-    border-radius: 25px;
     width: 100%;
     min-height: calc(100% - 80px); 
     height: auto;
+    margin-bottom: 25px;
   }
-  
 }
+
 </style>

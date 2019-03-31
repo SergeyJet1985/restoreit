@@ -1,7 +1,19 @@
 import api from '../api/api';
 
+const send = ({commit},message) =>{
+  api.request('post', `send`,message)
+    .then(data => {
+      commit('DELETE',data)
+    })
+}
+
+
 const loadCategory = ({commit},index) =>{
   commit('CATEGORY_LOAD',index)
+}
+
+const loadModel = ({commit},model) =>{
+  commit('MODEL_LOAD',model)
 }
 
 const getCatalog = ({ commit },test) => {
@@ -91,6 +103,8 @@ export default {
   addService,
   getCatalog,
   loadCategory,
+  loadModel,
+  send,
 
   
 }

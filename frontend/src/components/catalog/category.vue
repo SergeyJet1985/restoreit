@@ -11,7 +11,7 @@
       :key="item">
       <v-card color="transparent" flat>
         <v-container  grid-list-sm>
-          <v-layout class="block" align-start  wrap fill-height>
+          <v-layout class="block" align-center justify-center wrap>
             <div v-for="model in Category.model" :key="model.name">            
               <list-category class="block__list" v-if="model.mark==item" :model="model" /> 
             </div>
@@ -68,9 +68,17 @@ export default {
   .block{
   justify-content: center;
   &__list{
-    margin: 15px;
+    margin: 15px 5px;
     
   }
   }
+}
+@media only screen and (max-width: 959px){
+  .v-card{
+    .container{
+      padding: 0;
+    }
+  }
+
 }
 </style>

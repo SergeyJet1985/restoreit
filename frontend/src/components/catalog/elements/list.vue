@@ -10,7 +10,7 @@
             </v-img>
             <v-card-title primary-title>
               <div>
-                <h3 class="text-xs-center" >{{model.mark}}{{model.name}}</h3>
+                <h3 class="text-xs-center" >{{model.name}}</h3>
               </div>
             </v-card-title>
             <v-expand-transition>
@@ -19,7 +19,7 @@
                 class="d-flex transition-fast-in-fast-out v-card--reveal display-3"
                 style="height: 100%;"
               >
-                <v-btn outline class="card__icon" color="white card__icon">
+                <v-btn @click="Push()" outline class="card__icon" color="white card__icon">
                   <span class="black--text">Стоимость</span>
                   <v-icon color="black">skip_next</v-icon>
                 </v-btn>
@@ -41,7 +41,8 @@ export default {
   },
   methods:{
     Push(){
-       // this.$router.push(this.link)
+      this.$store.dispatch('loadModel', this.model);
+      this.$router.push('service')
     },
   }
 }
@@ -52,7 +53,7 @@ export default {
   align-items: center;
   bottom: 0;
   justify-content: center;
-  background-color: rgba(51, 255, 177, 0.418);
+  background-color: rgba(28, 29, 29, 0.418);
   position: absolute;
   width: 100%;
   .card__icon{
@@ -73,7 +74,7 @@ h3{
   align-items: center;
   bottom: 0;
   justify-content: center;
-  background-color: rgba(51, 255, 177, 0.418);
+  background-color: rgba(28, 29, 29, 0.418);
   position: absolute;
   width: 100%;
   .card__icon{

@@ -1,9 +1,9 @@
 <template>
   <div class="footer__yandex-map">
 <yandex-map
+  class="footer__yandex-map__block"
   :coords="[55.750028, 37.534397]"
   zoom="15"
-  style="width: 500px; height: 250px;"
   :cluster-options="{
     1: {clusterDisableClickZoom: true}
   }"
@@ -50,6 +50,23 @@ import { yandexMap, ymapMarker } from 'vue-yandex-maps'
   background-color: rgb(241, 241, 241);
   padding: 10px;
   border-radius: 5px;
+  &__block{
+    width: 300px;
+    height: 150px;
+  }
+}
+@media only screen and (max-width: 640px) {
+  #app {
+    .footer__yandex-map{
+      background-color: rgb(241, 241, 241);
+      padding: 10px;
+      border-radius: 5px;
+      &__block{
+        width: 100%;
+        height: 150px;
+      }
+    }
+  }
 }
 
 </style>

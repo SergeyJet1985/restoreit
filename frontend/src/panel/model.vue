@@ -19,15 +19,15 @@
       <div v-if="info.service"  class="model__conteiner-item">
         <div v-for="item in info.service" :key="item.name" class="item__created">
           <div class="item__created-item">
-            {{item.product}}
+            <p>{{item.product}}</p>
+          </div>
+          <div class="item__created-item">
+            <p>{{item.price}}</p>
           </div>
           <div class="item__created-item">
             <v-btn @click="removeService(item.product,item.price)" outline fab dark small color="indigo">
               <v-icon dark>delete</v-icon>
             </v-btn>
-          </div>
-          <div class="item__created-item">
-            {{item.price}}
           </div>
         </div>
       </div>
@@ -110,10 +110,11 @@
     flex-direction: column;
     &-item{
       display: -webkit-flex; 
-      -webkit-flex-direction: row;
+      -webkit-flex-direction: column;
       display: flex;
-      flex-direction: row;
+      flex-direction: column;
       justify-content: center;
+      align-items: center;
       .item{
         &__header{
 
@@ -133,10 +134,14 @@
           -webkit-flex-direction: row;
           display: flex;
           flex-direction: row;
-          
           border-bottom:1px solid #757373;
           &-item{
-            margin:0 80px;
+            p{
+              padding-top: 16px;
+            }
+            p:first-child{
+              padding-right: 26px;
+            }
           }
         }
         &__edit{
@@ -162,7 +167,5 @@
       }
     }
   }
-
-  
 }
 </style>

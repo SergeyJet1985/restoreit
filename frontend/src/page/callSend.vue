@@ -85,8 +85,8 @@
     methods: {
       validate () {
         if (this.$refs.form.validate()) {
-         // this.$refs.form.reset()
-         // this.send = false;
+          this.$refs.form.reset()
+          this.send = false;
           const message ={
             name:this.name,
             mail:this.email,
